@@ -13,8 +13,7 @@
     </div>
 
     <div class="app-container">
-                <!-- Interactive Control Bar Area -->
-              <!-- Interactive Control Bar Area -->
+        <!-- Interactive Control Bar Area -->
         <div class="control-panel">
             <div class="input-pill-row">
                 <input type="text" id="name-input" placeholder="Type your name or username..." autocomplete="off">
@@ -24,12 +23,10 @@
             <div class="file-selector-row">
                 <label for="photo-input" class="custom-file-upload">Choose File</label>
                 <input type="file" id="photo-input" accept="image/*">
-                <!-- NEW: This text will instantly show what file you selected! -->
+                <!-- Displays the selected filename! -->
                 <span id="file-chosen-text">No file selected</span>
             </div>
         </div>
-
-
 
         <!-- Banner Text (Will scroll away naturally with the feed) -->
         <div class="welcome-banner">
@@ -40,13 +37,8 @@
         <div id="photo-gallery" class="gallery-grid"></div>
     </div>
 
-    <script type="module" src="app.js"></script>
-        <!-- Add this tag right above your app.js link to inject the database library locally! -->
+    <!-- Direct universal initialization script layer to bypass CDN timeouts -->
     <script src="https://unpkg.com"></script>
     <script src="app.js"></script>
 </body>
 </html>
-
-</body>
-</html>
-
