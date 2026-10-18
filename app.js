@@ -1,4 +1,4 @@
-import { createClient } from 'https://esm.sh'
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.118.0'
 
 // 1. SUPABASE PROJECT CONNECTION SETTINGS
 const SUPABASE_URL = 'https://kqalrdrbondaohwxksol.supabase.co/rest/v1/';
