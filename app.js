@@ -1,16 +1,17 @@
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.118.0'
+// STEP A: DELETE OR REMOVE the old "import { createClient } ..." line completely from the top!
 
-// 1. SUPABASE PROJECT CONNECTION SETTINGS
-const SUPABASE_URL = 'https://kqalrdrbondaohwxksol.supabase.co/rest/v1/';
-const SUPABASE_ANON_KEY = 'sb_publishable_ytEEU4fhyZzAyZ0yJdhMRA_QnZIwKCq';
+// STEP B: Use the direct universal initialization command instead:
+const SUPABASE_URL = 'https://ysrykjfdtlpjzxatadmo.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_Q_XQKdq78SzHpIIOwLU68w_BZpDIbf1';
 
-const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+// This grabs the tool directly from the HTML script injection layer!
+const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 const photoInput = document.getElementById('photo-input');
 const nameInput = document.getElementById('name-input');
 const uploadBtn = document.getElementById('upload-btn');
 const photoGallery = document.getElementById('photo-gallery');
-const fileChosenText = document.getElementById('file-chosen-text'); // Target file text element
+
 
 // NEW INTERACTIVE TRIGGER: Update file text indicator instantly on click selection
 photoInput.addEventListener('change', () => {
