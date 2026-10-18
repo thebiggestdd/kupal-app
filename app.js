@@ -10,6 +10,16 @@ const photoInput = document.getElementById('photo-input');
 const nameInput = document.getElementById('name-input');
 const uploadBtn = document.getElementById('upload-btn');
 const photoGallery = document.getElementById('photo-gallery');
+const fileNameDisplay = document.getElementById('file-name-display'); // Target the new text element
+
+// NEW ACTION: Update the text instantly on screen when a user selects an image file
+photoInput.addEventListener('change', () => {
+    if (photoInput.files.length > 0) {
+        fileNameDisplay.innerText = photoInput.files[0].name;
+    } else {
+        fileNameDisplay.innerText = "No file chosen";
+    }
+});
 
 // 2. FILE UPLOAD AND DATABASE SAVING LOGIC
 uploadBtn.addEventListener('click', async () => {
@@ -25,6 +35,7 @@ uploadBtn.addEventListener('click', async () => {
         return;
     }
 
+    // FIXED LINE HERE: Added [0] to grab the actual raw picture file container asset correctly!
     const file = files[0]; 
     const uniqueFileName = `gallery_${Date.now()}_${file.name}`;
 
@@ -60,6 +71,7 @@ uploadBtn.addEventListener('click', async () => {
 
         photoInput.value = '';
         nameInput.value = ''; 
+        fileNameDisplay.innerText = "No file chosen"; // Reset the filename display text tracker
         alert('Photo successfully shared with the barkada! 🚀');
 
     } catch (error) {
@@ -105,21 +117,17 @@ async function deletePhoto(id, imageUrl) {
 
 // 4. RENDERING PHOTO CARDS TO MATCH YOUR CANVA MOCKUP
 function displayImageInGrid(id, imageUrl, uploaderName, createdAt) {
-    // Create the outer card frame
     const cardContainer = document.createElement('div');
     cardContainer.className = 'photo-card';
     cardContainer.id = `photo-${id}`;
 
-    // Generate the Image tag module
     const newImage = document.createElement('img');
     newImage.src = imageUrl;
     newImage.alt = "Shared Memory Picture";
 
-    // Generate the footer metadata layout wrapper container row
     const footerDataRow = document.createElement('div');
     footerDataRow.className = 'card-details-row';
 
-    // Group the text details elements together neatly
     const metaGroup = document.createElement('div');
     metaGroup.className = 'text-meta-group';
 
@@ -127,7 +135,6 @@ function displayImageInGrid(id, imageUrl, uploaderName, createdAt) {
     titleDiv.className = 'uploader-title';
     titleDiv.innerText = uploaderName;
 
-    // Convert date string parameters into human readable timestamps
     const uploadDate = new Date(createdAt).toLocaleDateString(undefined, {
         month: 'short',
         day: 'numeric',
@@ -142,20 +149,17 @@ function displayImageInGrid(id, imageUrl, uploaderName, createdAt) {
     metaGroup.appendChild(titleDiv);
     metaGroup.appendChild(timestampDiv);
 
-    // Generate the custom deep blue pill deletion button
     const deleteBtn = document.createElement('button');
     deleteBtn.className = 'insta-delete-btn';
     deleteBtn.innerText = 'Delete';
     deleteBtn.addEventListener('click', () => deletePhoto(id, imageUrl));
 
-    // Compile all structural child nodes together in matching presentation layout hierarchy
     footerDataRow.appendChild(metaGroup);
     footerDataRow.appendChild(deleteBtn);
 
     cardContainer.appendChild(newImage);
     cardContainer.appendChild(footerDataRow);
 
-    // Slide elements into layout view smoothly
     photoGallery.insertBefore(cardContainer, photoGallery.firstChild);
 }
 
@@ -194,6 +198,4 @@ supabase
   )
   .subscribe();
 
-// Initial page startup loader execution pass
 loadEntireGallery();
-
