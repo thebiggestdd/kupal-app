@@ -10,18 +10,18 @@ const photoInput = document.getElementById('photo-input');
 const nameInput = document.getElementById('name-input');
 const uploadBtn = document.getElementById('upload-btn');
 const photoGallery = document.getElementById('photo-gallery');
-const fileNameDisplay = document.getElementById('file-name-display'); // Target the new text element
+const fileChosenText = document.getElementById('file-chosen-text'); // Target file text element
 
-// NEW ACTION: Update the text instantly on screen when a user selects an image file
+// NEW INTERACTIVE TRIGGER: Update file text indicator instantly on click selection
 photoInput.addEventListener('change', () => {
     if (photoInput.files.length > 0) {
-        fileNameDisplay.innerText = photoInput.files[0].name;
+        fileChosenText.innerText = photoInput.files[0].name; // Show file name (e.g. photo.jpg)
     } else {
-        fileNameDisplay.innerText = "No file chosen";
+        fileChosenText.innerText = "No file selected";
     }
 });
 
-// 2. FILE UPLOAD AND DATABASE SAVING LOGIC
+// 2. FILE UPLOAD LOGIC
 uploadBtn.addEventListener('click', async () => {
     const files = photoInput.files;
     
@@ -35,7 +35,6 @@ uploadBtn.addEventListener('click', async () => {
         return;
     }
 
-    // FIXED LINE HERE: Added [0] to grab the actual raw picture file container asset correctly!
     const file = files[0]; 
     const uniqueFileName = `gallery_${Date.now()}_${file.name}`;
 
@@ -43,27 +42,26 @@ uploadBtn.addEventListener('click', async () => {
         uploadBtn.innerText = "Uploading...";
         uploadBtn.disabled = true;
 
-        // Step A: Push raw file asset into the 'photos' storage bucket
         const { data: storageData, error: storageError } = await supabase.storage
             .from('photos')
             .upload(uniqueFileName, file);
 
         if (storageError) throw storageError;
 
-        // Step B: Fetch the permanent public web URL link path string
         const { data: urlData } = supabase.storage
             .from('photos')
             .getPublicUrl(uniqueFileName);
 
         const publicUrl = urlData.publicUrl;
 
-        // Step C: Log tracking rows directly inside your 'user_inputs' data table
+        // Save records with likes defaulting to 0 parameters
         const { data: dbData, error: dbError } = await supabase
             .from('user_inputs')
             .insert([
                 { 
                     url: publicUrl, 
-                    uploader_name: nameInput.value.trim() 
+                    uploader_name: nameInput.value.trim(),
+                    likes: 0
                 }
             ]);
 
@@ -71,7 +69,7 @@ uploadBtn.addEventListener('click', async () => {
 
         photoInput.value = '';
         nameInput.value = ''; 
-        fileNameDisplay.innerText = "No file chosen"; // Reset the filename display text tracker
+        fileChosenText.innerText = "No file selected"; // Reset file text display
         alert('Photo successfully shared with the barkada! 🚀');
 
     } catch (error) {
@@ -83,7 +81,22 @@ uploadBtn.addEventListener('click', async () => {
     }
 });
 
-// 3. SECURE ASSET AND RECORD DELETION LOGIC
+// 3. NEW FEATURE: INCREMENT LIKE COUNTER VIA DATABASE QUERY
+async function likePhoto(id, currentLikes) {
+    try {
+        const { error } = await supabase
+            .from('user_inputs')
+            .update({ likes: currentLikes + 1 })
+            .eq('id', id);
+
+        if (error) throw error;
+        // The Realtime listener will catch this update and refresh your screen automatically!
+    } catch (error) {
+        console.error("Like interaction failed:", error.message);
+    }
+}
+
+// 4. SECURE DELETION LOGIC
 async function deletePhoto(id, imageUrl) {
     if (!confirm("Are you sure you want to delete this photo permanently?")) {
         return;
@@ -92,7 +105,6 @@ async function deletePhoto(id, imageUrl) {
     try {
         const filename = imageUrl.split('/').pop();
 
-        // Step A: Delete matching target tracking row index from database
         const { error: dbError } = await supabase
             .from('user_inputs')
             .delete()
@@ -100,7 +112,6 @@ async function deletePhoto(id, imageUrl) {
 
         if (dbError) throw dbError;
 
-        // Step B: Purge the actual file container from storage bucket directory
         const { error: storageError } = await supabase.storage
             .from('photos')
             .remove([filename]);
@@ -115,8 +126,8 @@ async function deletePhoto(id, imageUrl) {
     }
 }
 
-// 4. RENDERING PHOTO CARDS TO MATCH YOUR CANVA MOCKUP
-function displayImageInGrid(id, imageUrl, uploaderName, createdAt) {
+// 5. RENDERING PHOTO CARDS (WITH LIKE BUTTON ATTACHED)
+function displayImageInGrid(id, imageUrl, uploaderName, createdAt, likeCount) {
     const cardContainer = document.createElement('div');
     cardContainer.className = 'photo-card';
     cardContainer.id = `photo-${id}`;
@@ -149,13 +160,26 @@ function displayImageInGrid(id, imageUrl, uploaderName, createdAt) {
     metaGroup.appendChild(titleDiv);
     metaGroup.appendChild(timestampDiv);
 
+    // Dynamic Actions Sidebar Wrapper Container
+    const actionsContainer = document.createElement('div');
+    actionsContainer.className = 'card-actions';
+
+    // Generate Interaction Heart Button Node Element
+    const likeBtn = document.createElement('button');
+    likeBtn.className = 'like-btn';
+    likeBtn.innerText = `❤️ ${likeCount || 0}`;
+    likeBtn.addEventListener('click', () => likePhoto(id, likeCount || 0));
+
     const deleteBtn = document.createElement('button');
     deleteBtn.className = 'insta-delete-btn';
     deleteBtn.innerText = 'Delete';
     deleteBtn.addEventListener('click', () => deletePhoto(id, imageUrl));
 
+    actionsContainer.appendChild(likeBtn);
+    actionsContainer.appendChild(deleteBtn);
+
     footerDataRow.appendChild(metaGroup);
-    footerDataRow.appendChild(deleteBtn);
+    footerDataRow.appendChild(actionsContainer);
 
     cardContainer.appendChild(newImage);
     cardContainer.appendChild(footerDataRow);
@@ -163,7 +187,7 @@ function displayImageInGrid(id, imageUrl, uploaderName, createdAt) {
     photoGallery.insertBefore(cardContainer, photoGallery.firstChild);
 }
 
-// 5. READ SYSTEM DATA LOG CATALOG FROM SUPABASE TABLE
+// 6. READ DATA LOG CATALOG FROM SUPABASE TABLE
 async function loadEntireGallery() {
     try {
         photoGallery.innerHTML = '';
@@ -177,7 +201,8 @@ async function loadEntireGallery() {
 
         if (data) {
             for (const record of data) {
-                displayImageInGrid(record.id, record.url, record.uploader_name, record.created_at);
+                // Pass record.likes down into structural renderer function variables parameters
+                displayImageInGrid(record.id, record.url, record.uploader_name, record.created_at, record.likes);
             }
         }
     } catch (error) {
@@ -185,7 +210,7 @@ async function loadEntireGallery() {
     }
 }
 
-// 6. REALTIME STREAM BACKGROUND BROADCAST LISTENER
+// 7. REALTIME STREAM BACKGROUND BROADCAST LISTENER
 supabase
   .channel('live_user_inputs')
   .on(
