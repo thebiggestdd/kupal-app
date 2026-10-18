@@ -1,8 +1,8 @@
 // STEP A: DELETE OR REMOVE the old "import { createClient } ..." line completely from the top!
 
 // STEP B: Use the direct universal initialization command instead:
-const SUPABASE_URL = 'https://ysrykjfdtlpjzxatadmo.supabase.co';
-const SUPABASE_ANON_KEY = 'sb_publishable_Q_XQKdq78SzHpIIOwLU68w_BZpDIbf1';
+const SUPABASE_URL = 'https://kqalrdrbondaohwxksol.supabase.co/rest/v1/';
+const SUPABASE_ANON_KEY = 'sb_publishable_ytEEU4fhyZzAyZ0yJdhMRA_QnZIwKCq';
 
 // This grabs the tool directly from the HTML script injection layer!
 const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
