@@ -6,14 +6,13 @@
 }
 
 body {
-    background-color: #38b6ff; /* Bright vibrant Canva background blue */
+    background-color: #3fa9f5; /* Bright vibrant Canva background blue */
     color: #ffffff;
     padding: 20px;
     position: relative;
     min-height: 100vh;
 }
 
-/* Top Right Fixed Watermark/Logo positioning */
 .top-logo-container {
     position: absolute;
     top: 20px;
@@ -35,7 +34,6 @@ body {
     padding-top: 20px;
 }
 
-/* Centered Top Action Control Center Block */
 .control-panel {
     display: flex;
     flex-direction: column;
@@ -44,7 +42,6 @@ body {
     margin-bottom: 40px;
 }
 
-/* Clean rounded pill wrapper row container layout */
 .input-pill-row {
     display: flex;
     background-color: #ffffff;
@@ -87,7 +84,6 @@ body {
     background-color: #003d7a;
 }
 
-/* Hide native default browser file layout choose inputs buttons */
 #photo-input {
     display: none;
 }
@@ -104,7 +100,14 @@ body {
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
-/* Scrollable Welcome Sub-Header Text Banner */
+#file-chosen-text {
+    font-size: 0.85rem;
+    color: #ffffff;
+    font-weight: 500;
+    margin-left: 10px;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.15);
+}
+
 .welcome-banner {
     text-align: center;
     margin-bottom: 40px;
@@ -117,14 +120,12 @@ body {
     text-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-/* Photo Gallery Multicolumn Grid Framework */
 .gallery-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 30px;
 }
 
-/* Individual Content Image Card item block containers */
 .photo-card {
     background-color: #ffffff;
     border-radius: 12px;
@@ -135,17 +136,15 @@ body {
     border: 3px solid #0054a6; /* Deep blue solid frame border line accents */
 }
 
-/* The actual user uploaded memory photo frame layout style block */
 .photo-card img {
     width: 100%;
     aspect-ratio: 1 / 1;
     object-fit: cover;
     border-radius: 8px;
-    background-color: #cccccc; /* Pastel neutral placeholder backdrop fill hex */
+    background-color: #cccccc;
     margin-bottom: 12px;
 }
 
-/* Grid information data footprint layout alignment blocks */
 .card-details-row {
     display: flex;
     justify-content: space-between;
@@ -170,49 +169,12 @@ body {
     color: #666666;
 }
 
-/* Rounded blue deletion control actions handles */
-.insta-delete-btn {
-    background-color: #0054a6;
-    color: #ffffff;
-    border: none;
-    outline: none;
-    padding: 6px 14px;
-    border-radius: 20px;
-    font-size: 0.8rem;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background-color 0.2s;
-}
-
-#file-name-display {
-    font-size: 0.85rem;
-    color: #ffffff;
-    font-weight: 500;
-    margin-left: 8px;
-    text-shadow: 0 1px 2px rgba(0,0,0,0.1);
-}
-
-.insta-delete-btn:hover {
-    background-color: #ed4956; /* Shifts instantly into target warning warning red highlight on hover state */
-}
-
-/* File name tracker text styling */
-#file-chosen-text {
-    font-size: 0.85rem;
-    color: #ffffff;
-    font-weight: 500;
-    margin-left: 10px;
-    text-shadow: 0 1px 2px rgba(0,0,0,0.15);
-}
-
-/* Action row for reactions inside cards */
 .card-actions {
     display: flex;
     align-items: center;
     gap: 8px;
 }
 
-/* Minimalist Deep Blue Heart Button Layout */
 .like-btn {
     background-color: #0054a6;
     color: #ffffff;
@@ -226,5 +188,22 @@ body {
 }
 
 .like-btn:active {
-    transform: scale(0.9); /* Subtle compression pop effect when clicked */
+    transform: scale(0.9);
+}
+
+.insta-delete-btn {
+    background-color: #0054a6;
+    color: #ffffff;
+    border: none;
+    outline: none;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.insta-delete-btn:hover {
+    background-color: #ed4956;
 }
