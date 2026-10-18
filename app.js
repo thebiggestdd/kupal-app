@@ -1,22 +1,20 @@
-// STEP A: DELETE OR REMOVE the old "import { createClient } ..." line completely from the top!
-
-// STEP B: Use the direct universal initialization command instead:
+// 1. SUPABASE PROJECT CONNECTION SETTINGS
 const SUPABASE_URL = 'https://kqalrdrbondaohwxksol.supabase.co/rest/v1/';
-const SUPABASE_ANON_KEY = 'sb_publishable_ytEEU4fhyZzAyZ0yJdhMRA_QnZIwKCq';
+const SUPABASE_ANON_KEY = 'https://kqalrdrbondaohwxksol.supabase.co/rest/v1/';
 
-// This grabs the tool directly from the HTML script injection layer!
-const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+// Initializing via the clean fallback window object wrapper
+const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 const photoInput = document.getElementById('photo-input');
 const nameInput = document.getElementById('name-input');
 const uploadBtn = document.getElementById('upload-btn');
 const photoGallery = document.getElementById('photo-gallery');
+const fileChosenText = document.getElementById('file-chosen-text');
 
-
-// NEW INTERACTIVE TRIGGER: Update file text indicator instantly on click selection
+// Update file text indicator instantly on click selection
 photoInput.addEventListener('change', () => {
     if (photoInput.files.length > 0) {
-        fileChosenText.innerText = photoInput.files[0].name; // Show file name (e.g. photo.jpg)
+        fileChosenText.innerText = photoInput.files[0].name;
     } else {
         fileChosenText.innerText = "No file selected";
     }
@@ -43,20 +41,20 @@ uploadBtn.addEventListener('click', async () => {
         uploadBtn.innerText = "Uploading...";
         uploadBtn.disabled = true;
 
-        const { data: storageData, error: storageError } = await supabase.storage
+        const { data: storageData, error: storageError } = await _supabase.storage
             .from('photos')
             .upload(uniqueFileName, file);
 
         if (storageError) throw storageError;
 
-        const { data: urlData } = supabase.storage
+        const { data: urlData } = _supabase.storage
             .from('photos')
             .getPublicUrl(uniqueFileName);
 
         const publicUrl = urlData.publicUrl;
 
         // Save records with likes defaulting to 0 parameters
-        const { data: dbData, error: dbError } = await supabase
+        const { data: dbData, error: dbError } = await _supabase
             .from('user_inputs')
             .insert([
                 { 
@@ -70,7 +68,7 @@ uploadBtn.addEventListener('click', async () => {
 
         photoInput.value = '';
         nameInput.value = ''; 
-        fileChosenText.innerText = "No file selected"; // Reset file text display
+        fileChosenText.innerText = "No file selected";
         alert('Photo successfully shared with the barkada! 🚀');
 
     } catch (error) {
@@ -82,16 +80,15 @@ uploadBtn.addEventListener('click', async () => {
     }
 });
 
-// 3. NEW FEATURE: INCREMENT LIKE COUNTER VIA DATABASE QUERY
+// 3. INCREMENT LIKE COUNTER VIA DATABASE QUERY
 async function likePhoto(id, currentLikes) {
     try {
-        const { error } = await supabase
+        const { error } = await _supabase
             .from('user_inputs')
             .update({ likes: currentLikes + 1 })
             .eq('id', id);
 
         if (error) throw error;
-        // The Realtime listener will catch this update and refresh your screen automatically!
     } catch (error) {
         console.error("Like interaction failed:", error.message);
     }
@@ -106,14 +103,14 @@ async function deletePhoto(id, imageUrl) {
     try {
         const filename = imageUrl.split('/').pop();
 
-        const { error: dbError } = await supabase
+        const { error: dbError } = await _supabase
             .from('user_inputs')
             .delete()
             .eq('id', id);
 
         if (dbError) throw dbError;
 
-        const { error: storageError } = await supabase.storage
+        const { error: storageError } = await _supabase.storage
             .from('photos')
             .remove([filename]);
 
@@ -127,7 +124,7 @@ async function deletePhoto(id, imageUrl) {
     }
 }
 
-// 5. RENDERING PHOTO CARDS (WITH LIKE BUTTON ATTACHED)
+// 5. RENDERING PHOTO CARDS
 function displayImageInGrid(id, imageUrl, uploaderName, createdAt, likeCount) {
     const cardContainer = document.createElement('div');
     cardContainer.className = 'photo-card';
@@ -161,11 +158,9 @@ function displayImageInGrid(id, imageUrl, uploaderName, createdAt, likeCount) {
     metaGroup.appendChild(titleDiv);
     metaGroup.appendChild(timestampDiv);
 
-    // Dynamic Actions Sidebar Wrapper Container
     const actionsContainer = document.createElement('div');
     actionsContainer.className = 'card-actions';
 
-    // Generate Interaction Heart Button Node Element
     const likeBtn = document.createElement('button');
     likeBtn.className = 'like-btn';
     likeBtn.innerText = `❤️ ${likeCount || 0}`;
@@ -193,7 +188,7 @@ async function loadEntireGallery() {
     try {
         photoGallery.innerHTML = '';
 
-        const { data, error } = await supabase
+        const { data, error } = await _supabase
             .from('user_inputs')
             .select('*')
             .order('created_at', { ascending: true });
@@ -202,7 +197,6 @@ async function loadEntireGallery() {
 
         if (data) {
             for (const record of data) {
-                // Pass record.likes down into structural renderer function variables parameters
                 displayImageInGrid(record.id, record.url, record.uploader_name, record.created_at, record.likes);
             }
         }
@@ -212,7 +206,7 @@ async function loadEntireGallery() {
 }
 
 // 7. REALTIME STREAM BACKGROUND BROADCAST LISTENER
-supabase
+_supabase
   .channel('live_user_inputs')
   .on(
     'postgres_changes', 
