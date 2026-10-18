@@ -1,4 +1,4 @@
-import { createClient } from 'https://jsdelivr.net'
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.118.0/+esm'
 
 // 1. SUPABASE PROJECT CONNECTION SETTINGS
 const SUPABASE_URL = 'https://kqalrdrbondaohwxksol.supabase.co/rest/v1/';
