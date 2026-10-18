@@ -1,1 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kupal App</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Top Floating Logo Wrapper -->
+    <div class="top-logo-container">
+        <span class="logo-brand">Kupal</span>
+    </div>
+
+    <div class="app-container">
+        <!-- Interactive Control Bar Area -->
+        <div class="control-panel">
+            <div class="input-pill-row">
+                <input type="text" id="name-input" placeholder="Type your name or username..." autocomplete="off">
+                <button id="upload-btn">Upload</button>
+            </div>
+            
+            <div class="file-selector-row">
+                <label for="photo-input" class="custom-file-upload">Choose File</label>
+                <input type="file" id="photo-input" accept="image/*">
+            </div>
+        </div>
+
+        <!-- Banner Text (Will scroll away naturally with the feed) -->
+        <div class="welcome-banner">
+            <h2>Barkada - Kupal, upload your random pictures<br>that you want to share with us!!</h2>
+        </div>
+
+        <!-- The Photo Feed Grid Display -->
+        <div id="photo-gallery" class="gallery-grid"></div>
+    </div>
+
+    <script type="module" src="app.js"></script>
+</body>
+</html>
 
