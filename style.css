@@ -1,1 +1,190 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
+}
+
+body {
+    background-color: #38b6ff; /* Bright vibrant Canva background blue */
+    color: #ffffff;
+    padding: 20px;
+    position: relative;
+    min-height: 100vh;
+}
+
+/* Top Right Fixed Watermark/Logo positioning */
+.top-logo-container {
+    position: absolute;
+    top: 20px;
+    right: 40px;
+    z-index: 10;
+}
+
+.logo-brand {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: #ffffff;
+    letter-spacing: 0.5px;
+}
+
+.app-container {
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding-top: 20px;
+}
+
+/* Centered Top Action Control Center Block */
+.control-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 40px;
+}
+
+/* Clean rounded pill wrapper row container layout */
+.input-pill-row {
+    display: flex;
+    background-color: #ffffff;
+    border-radius: 30px;
+    padding: 4px 6px;
+    width: 100%;
+    max-width: 550px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+#name-input {
+    flex: 1;
+    border: none;
+    outline: none;
+    padding: 10px 20px;
+    font-size: 0.95rem;
+    color: #333333;
+    border-radius: 30px 0 0 30px;
+    background: transparent;
+}
+
+#name-input::placeholder {
+    color: #999999;
+}
+
+#upload-btn {
+    background-color: #0054a6; /* Deep blue button accent color hex entry */
+    color: #ffffff;
+    border: none;
+    outline: none;
+    padding: 10px 24px;
+    border-radius: 25px;
+    font-weight: bold;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+#upload-btn:hover {
+    background-color: #003d7a;
+}
+
+/* Hide native default browser file layout choose inputs buttons */
+#photo-input {
+    display: none;
+}
+
+.custom-file-upload {
+    display: inline-block;
+    background-color: #ffffff;
+    color: #333333;
+    padding: 6px 14px;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+/* Scrollable Welcome Sub-Header Text Banner */
+.welcome-banner {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.welcome-banner h2 {
+    font-size: 1.6rem;
+    font-weight: 700;
+    line-height: 1.4;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Photo Gallery Multicolumn Grid Framework */
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 30px;
+}
+
+/* Individual Content Image Card item block containers */
+.photo-card {
+    background-color: #ffffff;
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    border: 3px solid #0054a6; /* Deep blue solid frame border line accents */
+}
+
+/* The actual user uploaded memory photo frame layout style block */
+.photo-card img {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: 8px;
+    background-color: #cccccc; /* Pastel neutral placeholder backdrop fill hex */
+    margin-bottom: 12px;
+}
+
+/* Grid information data footprint layout alignment blocks */
+.card-details-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-top: auto;
+}
+
+.text-meta-group {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    color: #333333;
+}
+
+.uploader-title {
+    font-weight: bold;
+    font-size: 0.95rem;
+}
+
+.upload-timestamp {
+    font-size: 0.8rem;
+    color: #666666;
+}
+
+/* Rounded blue deletion control actions handles */
+.insta-delete-btn {
+    background-color: #0054a6;
+    color: #ffffff;
+    border: none;
+    outline: none;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.insta-delete-btn:hover {
+    background-color: #ed4956; /* Shifts instantly into target warning warning red highlight on hover state */
+}
 
